@@ -8,7 +8,7 @@ const PORT = 4000;
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'aulaback',
+    database: 'exbb',
     password: 'ds564',
     port: 5432,
 });
@@ -78,12 +78,12 @@ function calcularSigno(mes, dia) {
 
 app.post('/usuarios', async (req, res) => {
     try {
-        const { nome, sobrenome, email, datadenascimento} = req.body;
+        const { nome, sobrenome, email, datanascimento} = req.body;
 
-        const dataNascimento = new Date(datadenascimento);
+        const dataNascimento = new Date(datanascimento);
         const idade = calcularIdade(dataNascimento);
         const signo = calcularSigno(dataNascimento.getMonth() + 1, dataNascimento.getDate());
-        await pool.query('INSERT INTO usuarios (nome, sobrenome, email, datadenascimento, idade, signo) VALUES ($1, $2, $3, $4, $5, $6)', [nome, sobrenome, email, datadenascimento, idade, signo])
+        await pool.query('INSERT INTO usuarios (nome, sobrenome, email, datanascimento, idade, signo) VALUES ($1, $2, $3, $4, $5, $6)', [nome, sobrenome, email, datanascimento, idade, signo])
         res.status(201).send({ mensagem: 'Usuario criado com sucesso' })
     } catch (error) {
         console.error('Erro ao inserir o usuário', error);
@@ -108,13 +108,13 @@ app.delete('/usuarios/:id', async (req, res) => {
 app.put('/usuarios/:id', async (req, res) => {
     try {
       const { id } = req.params;
-      const { nome, sobrenome, email, datadenascimento} = req.body;
-      const dataNascimento = new Date(datadenascimento);
+      const { nome, sobrenome, email, datanascimento} = req.body;
+      const dataNascimento = new Date(datanascimento);
       const idade = calcularIdade(dataNascimento);
       const signo = calcularSigno(dataNascimento.getMonth() + 1, dataNascimento.getDate());
 
 
-      await pool.query('UPDATE usuarios SET nome = $1, sobrenome = $2, email = $3, datadenascimento = $4, idade = $5, signo = $6 WHERE id = $7', [nome, sobrenome, email, datadenascimento, idade, signo, id]);
+      await pool.query('UPDATE usuarios SET nome = $1, sobrenome = $2, email = $3, datanascimento = $4, idade = $5, signo = $6 WHERE id = $7', [nome, sobrenome, email, datanascimento, idade, signo, id]);
       res.status(200).send({ mensagem: 'Usuário atualizado com sucesso'});
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
